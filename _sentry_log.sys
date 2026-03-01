@@ -1,0 +1,22 @@
+--- Sentry Log Initialized: 2026-03-01 02:06:20.767143 ---
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python3.13.exe | PID: 3796 | WHERE: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python3.13.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python3.13.exe | PID: 4840 | WHERE: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python3.13.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: dllhost.exe | PID: 15540 | WHERE: C:\Windows\System32\dllhost.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python.exe | PID: 15568 | WHERE: C:\Users\exeme\Desktop\seguridadCisco\.venv\Scripts\python.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python3.13.exe | PID: 17160 | WHERE: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python3.13.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python3.13.exe | PID: 17512 | WHERE: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python3.13.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: python.exe | PID: 19040 | WHERE: C:\Users\exeme\Desktop\seguridadCisco\.venv\Scripts\python.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: svchost.exe | PID: 19960 | WHERE: C:\Windows\System32\svchost.exe | ENTRY_POINT: User: None
+[2026-03-01 02:06:38] EVENT: PROCESS_NEW | WHAT: Name: conhost.exe | PID: 20432 | WHERE: C:\Windows\System32\conhost.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:38] EVENT: NETWORK_ENTRY | WHAT: Remote: 20.69.137.228:443 | WHERE: Local: 192.168.100.51:64763 | ENTRY_POINT: Network:20.69.137.228 -> LocalPort:64763
+[2026-03-01 02:06:43] EVENT: PROCESS_NEW | WHAT: Name: python.exe | PID: 6456 | WHERE: C:\Users\exeme\Desktop\seguridadCisco\.venv\Scripts\python.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:43] EVENT: PROCESS_NEW | WHAT: Name: identity_helper.exe | PID: 7416 | WHERE: C:\Program Files (x86)\Microsoft\Edge\Application\145.0.3800.82\identity_helper.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:43] EVENT: PROCESS_NEW | WHAT: Name: msedge.exe | PID: 16740 | WHERE: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:43] EVENT: PROCESS_NEW | WHAT: Name: python3.13.exe | PID: 19092 | WHERE: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python3.13.exe | ENTRY_POINT: User: EXEQ\exeme
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 2800:3f0:4002:806::200a:443 | WHERE: Local: 2803:9800:a8c1:800c:2a:87eb:7e68:3770:61027 | ENTRY_POINT: Network:2800:3f0:4002:806::200a -> LocalPort:61027
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 138.201.194.90:443 | WHERE: Local: 192.168.100.51:63881 | ENTRY_POINT: Network:138.201.194.90 -> LocalPort:63881
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 138.201.194.90:443 | WHERE: Local: 192.168.100.51:53488 | ENTRY_POINT: Network:138.201.194.90 -> LocalPort:53488
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 138.201.194.90:443 | WHERE: Local: 192.168.100.51:63242 | ENTRY_POINT: Network:138.201.194.90 -> LocalPort:63242
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 88.99.95.31:443 | WHERE: Local: 192.168.100.51:53401 | ENTRY_POINT: Network:88.99.95.31 -> LocalPort:53401
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 88.99.95.31:443 | WHERE: Local: 192.168.100.51:56163 | ENTRY_POINT: Network:88.99.95.31 -> LocalPort:56163
+[2026-03-01 02:06:43] EVENT: NETWORK_ENTRY | WHAT: Remote: 88.99.95.31:443 | WHERE: Local: 192.168.100.51:61026 | ENTRY_POINT: Network:88.99.95.31 -> LocalPort:61026
