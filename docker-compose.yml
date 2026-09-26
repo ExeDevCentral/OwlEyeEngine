@@ -5,6 +5,13 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - BPF
+    volumes:
+      - /sys/kernel/debug:/sys/kernel/debug:ro
+      - /proc:/proc:ro
     environment:
       - OWLEYE_PORT=8000
       - OWLEYE_DEMO_MODE=${OWLEYE_DEMO_MODE:-false}

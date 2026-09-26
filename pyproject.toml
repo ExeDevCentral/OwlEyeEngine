@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "owleye-engine"
+version = "4.0.0"
+description = "Enterprise Cyber Security Platform: Kernel-Level eBPF Telemetry & Active Defense"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "ExeDevCentral & Exepaginasweb", email = "contact@exepaginasweb.com"}
+]
+keywords = [
+    "cybersecurity", "ebpf", "kernel-telemetry", "prometheus",
+    "active-defense", "edr", "xdr", "mitre-attack", "fastapi"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Networking :: Monitoring",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+dependencies = [
+    "psutil>=5.9.0",
+    "requests>=2.31.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "websockets>=12.0",
+    "pydantic>=2.0"
+]
+
+[project.optional-dependencies]
+linux = [
+    "pyroute2>=0.7.0"
+]
+
+[project.scripts]
+owleye = "owleye_cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ExeDevCentral/OwlEyeEngine"
+Repository = "https://github.com/ExeDevCentral/OwlEyeEngine.git"
+Documentation = "https://github.com/ExeDevCentral/OwlEyeEngine#readme"

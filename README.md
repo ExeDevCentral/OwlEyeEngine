@@ -1,155 +1,159 @@
-# 🦉 OwlEyeEngine: The Silent Monitor & Active Defense (v3.0 Global Edition)
+# 🦉 OwlEyeEngine: Kernel Telemetry & Active Defense (v4.0 Enterprise Edition)
 
 ![OwlEye Logo](owl_eye.png)
 
-![Cybersecurity Shield](https://img.shields.io/badge/Focus-Cybersecurity-blue?style=for-the-badge&logo=shield)
-![Platform Support](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-brightgreen?style=for-the-badge)
-![Network](https://img.shields.io/badge/Context-Cisco%20Networks-orange?style=for-the-badge&logo=cisco)
-![Active Defense](https://img.shields.io/badge/Defense-Active%20Mitigation-red?style=for-the-badge)
-![Dashboard](https://img.shields.io/badge/UI-FastAPI%20Web%20Dashboard-cyan?style=for-the-badge)
+![Cybersecurity Shield](https://img.shields.io/badge/Focus-Enterprise%20EDR%20%7C%20XDR-blue?style=for-the-badge&logo=shield)
+![Kernel eBPF](https://img.shields.io/badge/Kernel-Linux%20eBPF%20%7C%20ETW-purple?style=for-the-badge&logo=linux)
+![Telemetry](https://img.shields.io/badge/Telemetry-Prometheus%20%7C%20OCSF-orange?style=for-the-badge&logo=prometheus)
+![Platform Support](https://img.shields.io/badge/Platform-Linux%20(Systemd)%20%7C%20Windows-brightgreen?style=for-the-badge)
+![Active Defense](https://img.shields.io/badge/Defense-nftables%20%7C%20iptables%20%7C%20netsh-red?style=for-the-badge)
+![Dashboard](https://img.shields.io/badge/UI-FastAPI%20Cyberpunk%20Dashboard-cyan?style=for-the-badge)
 
 ```text
     ^...^
-   / o o \
-   |  Y  |   "Silent flight, 360° vision, total active defense.
-    V v V    The predator the intruder never hears... until it strikes."
+   / o o \   "Silent flight, sub-microsecond kernel vision, total active defense.
+   |  Y  |    The predator the intruder never hears... until it strikes."
+    V v V    OwlEyeEngine v4.0 Enterprise & Regional Edition
 ```
 
-**OwlEyeEngine v3.0** es la evolución global del proyecto de seguridad, inspirado en la naturaleza del búho: un cazador nocturno, silencioso y letal. Este motor combina monitoreo de bajo nivel, detección heurística con puntuación de amenaza (*Threat Scoring*), mitigación activa (*Auto-Kill & IP Blocking*) y un **Panel Web futurista** en tiempo real.
+**OwlEyeEngine v4.0 Enterprise** es una plataforma integral de ciberseguridad, deteccion a nivel kernel (**eBPF & ETW**) y defensa activa automatizada. Inspirado en la naturaleza del buho (cazador nocturno con vision de 360 grados), este motor trasciende el monitoreo tradicional en espacio de usuario para ofrecer **telemetria en tiempo real**, **intercepcion de syscalls con latencia de microsegundos**, exportacion estandar a **Prometheus / SIEM**, soporte nativo para **Linux con nftables/systemd**, y un panel de comando interactivo futurista preparado para demostraciones y despliegues a nivel regional.
 
 ---
 
-## 🚀 Capacidades Principales (Edición Global)
+## ⚡ Novedades de la Version 4.0 Enterprise
 
-### 1. 🎯 Panel Web de Control e Inspección (Futurista & Glassmorphic)
-- **Visualización 360°:** Estado de CPU, Memoria, Uptime y Conexiones activas en tiempo real.
-- **Threat Feed Interactivo:** Historial de amenazas detectadas con botones de respuesta rápida ("Kill PID", "Bloquear IP").
-- **Filtro estilo `htop`:** Búsqueda rápida de procesos con consumo de recursos.
+1. **🔬 Telemetria a Nivel Kernel (Linux eBPF & Windows ETW):**
+   - Intercepcion de eventos de proceso (`sys_enter_execve`), conexiones de red (`sys_enter_connect`) y senales de terminacion (`sys_enter_kill`) directamente en el kernel del sistema operativo.
+   - Sonda C para eBPF en [`ebpf_probe.c`](file:///c:/Users/exeme/Desktop/owl/OwlEyeEngine-main/OwlEyeEngine-main/ebpf_probe.c) compatible con BCC, tracepoints y Netlink Process Connector.
+   - Ring Buffer circular con calculo instantaneo de llamadas por segundo, microsegundos de latencia y porcentaje de utilizacion.
 
-### 2. 🛡️ Módulo de Defensa Activa (Active Defense)
-- **Auto-Kill Proactivo:** Finaliza instantáneamente procesos maliciosos ejecutados desde directorios temporales o sospechosos (`/tmp`, `AppData\Local\Temp`).
-- **Bloqueo en Firewall:** Bloquea direcciones IP hostiles mediante `Windows Firewall` (Windows) o `iptables` (Linux) ante barridos o escaneos de puertos (*Port Scanning*).
-- **Control Manual o Automático:** Conmutador en tiempo real desde el Dashboard para alternar entre *Modo Alerta* y *Defensa Total*.
+2. **🌐 Pipeline de Telemetria Abierta & Prometheus Exporter:**
+   - Endpoint nativo `/metrics` en formato OpenMetrics compatible con Prometheus, Grafana Agent, VictoriaMetrics y Datadog.
+   - Streaming en vivo via **Server-Sent Events (SSE)** en `/api/telemetry/stream` y WebSockets `/ws/telemetry`.
+   - Exportacion de lotes de auditoria en formato **OCSF (Open Cybersecurity Schema Framework)** para integracion directa con SIEM (Splunk, Elastic, Wazuh).
 
-### 3. 🧠 Análisis Heurístico Avanzado (v3.0 Engine)
-- Detección de patrones anómalos de conexión (Cisco Context & Entry Point Tracking).
-- Scoring de amenaza ponderado de 0 a 100 con clasificación de severidad (LOW, MEDIUM, HIGH, CRITICAL).
+3. **🐧 Soporte Linux de Primera Clase & Empaquetado:**
+   - Soporte nativo para cortafuegos **`nftables`** (estandar en Debian 11/12, Ubuntu 22/24, RHEL 9) con retrocompatibilidad para **`iptables`** y Windows Firewall (`netsh`).
+   - Servicio del sistema **systemd** listo para produccion en [`packaging/systemd/owleye.service`](file:///c:/Users/exeme/Desktop/owl/OwlEyeEngine-main/OwlEyeEngine-main/packaging/systemd/owleye.service) con directivas de hardening (`ProtectSystem=full`, `CAP_BPF`, `CAP_NET_ADMIN`).
+   - Herramienta de linea de comandos **`owleye`** ([`owleye_cli.py`](file:///c:/Users/exeme/Desktop/owl/OwlEyeEngine-main/OwlEyeEngine-main/owleye_cli.py)) instalable via `pip install -e .`.
+   - Script instalador corporativo [`packaging/install_enterprise.sh`](file:///c:/Users/exeme/Desktop/owl/OwlEyeEngine-main/OwlEyeEngine-main/packaging/install_enterprise.sh).
 
-### 4. 📱 Alertas Nocturnas & Multi-Canal
-- Integración automática con **Telegram Bot API** para notificaciones críticas al móvil.
-- Exportación estructurada en `_sentry_log.sys` (archivo oculto de sistema).
+4. **🎯 Mapeo Tactico MITRE ATT&CK:**
+   - Detecciones correlacionadas con la taxonomia MITRE:
+     - **Execution (T1059 / T1059.004):** Rastreo de scripts e interpretes en eBPF.
+     - **Discovery (T1046):** Deteccion heuristica de barrido de puertos.
+     - **Command & Control (T1071):** Intercepcion de sockets de salida anomalos.
+     - **Defense Evasion (T1036):** Deteccion de binarios en `/tmp` o directorios temporales ocultos.
+     - **Privilege Escalation (T1068 / T1055):** Sonda de llamadas `ptrace` y manipulacion de memoria.
 
----
-
-## 🛠️ Arquitectura del Sistema
-
-- `sentry.py`: Orquestador principal del motor (Búho Core).
-- `active_defender.py`: Módulo de respuesta proactiva (Mitigación & Firewall).
-- `heuristic_analyzer.py`: Cerebro analítico y motor de puntuación de amenazas.
-- `web_dashboard.py`: Servidor de API REST en FastAPI para el Dashboard Web.
-- `dashboard_app/`: Interfaz gráfica interactiva (HTML5 / Vanilla CSS Cyberpunk / JS).
-- `network_monitor.py`: Rastreador de entradas y conexiones de red.
-- `process_monitor.py`: Monitoreo de procesos a bajo nivel.
-- `hidden_logger.py`: Diario sigiloso con persistencia oculta en SO.
+5. **🖥️ Command Center Futurista (Glassmorphic Cyberpunk):**
+   - Nueva pestana **`Kernel & Telemetry`** con metricas en tiempo real, matriz interactiva MITRE ATT&CK, terminal de telemetria en streaming y centro de exportacion para SOCs.
 
 ---
 
-## 💻 Instalación Rápida (One-Liner & Docker)
+## 🏛️ Arquitectura del Sistema v4.0
 
-### Opción A: Ejecución Local en Python
+```text
+[ Kernel Space: eBPF / Tracepoints / Netlink / ETW ]
+                     │  (sub-microsecond ring buffer)
+                     ▼
+           [ Kernel Telemetry Engine ]
+                     │
+         ┌───────────┴───────────┐
+         ▼                       ▼
+[ Telemetry Pipeline ]   [ Heuristic Analyzer & MITRE ]
+ (Prometheus /metrics)           │
+ (OCSF / SIEM Export)            ▼
+ (SSE & WS Live Feed)    [ Active Defender: nftables / kill ]
+```
+
+---
+
+## 🚀 Instalacion y Despliegue
+
+### Opcion A: Instalador Rapido en Linux (Servidores & Nodos)
 
 ```bash
-# Clone the repository
 git clone https://github.com/ExeDevCentral/OwlEyeEngine.git
 cd OwlEyeEngine
 
-# Install requirements
+# Ejecutar el instalador corporativo (requiere sudo para sondas y systemd)
+sudo bash packaging/install_enterprise.sh
+```
+
+El script configurara automaticamente las sondas de kernel, instalara el paquete Python en modo editable, registrara y habilitara el servicio `systemd`:
+```bash
+sudo systemctl status owleye
+```
+
+### Opcion B: Instalacion Rapida Local en Python
+
+```bash
 pip install -r requirements.txt
+pip install -e .
 
-# Run Sentry Engine + Web Dashboard
+# Iniciar el motor en modo produccion (o demo si no cuenta con privilegios)
 python sentry.py
 ```
-> Abre tu navegador en **`http://localhost:8000`** para acceder al Panel Web.
 
-### Opción B: Despliegue con Docker Compose (Recomendado)
+### Opcion C: Despliegue en Docker con Capacidades de Kernel
 
 ```bash
-docker-compose up -d --build
+# Modo produccion con capacidades BPF
+docker compose up -d owleye
+
+# Modo Demo para presentaciones regionales y testing
+docker compose --profile demo up -d owleye-demo
 ```
 
 ---
 
-## 🤝 Conéctate con el Búho
+## 💻 Herramienta CLI (`owleye`)
 
-*"La seguridad no es un producto, es un proceso de vigilancia constante y respuesta letal."*
+La version 4.0 incluye una suite de linea de comandos para administradores y analistas SOC:
 
-[GitHub Repository: OwlEyeEngine](https://github.com/ExeDevCentral/OwlEyeEngine.git)
+```bash
+# Diagnosticar estado del motor, sondas activas y telemetria
+owleye status
+
+# Evaluar capacidades del kernel anfitrion (eBPF, Netlink, ETW, JIT)
+owleye kernel
+
+# Transmision en tiempo real de llamadas al sistema interceptadas
+owleye stream
+
+# Obtener snapshot de metricas Prometheus
+owleye metrics
+
+# Bloquear o desbloquear una IP en el cortafuegos del host
+owleye block 198.51.100.7 --reason "Ataque de fuerza bruta detectado"
+owleye unblock 198.51.100.7
+
+# Finalizar proceso malicioso por PID
+owleye kill 4921 --reason "Binario no autorizado en /tmp"
+```
 
 ---
 
-## ?? Despliegue en Producci�n
+## 📊 Endpoints de Telemetria & API REST
 
-### Modo Demo (Portfolio / Demo en vivo)
+| Endpoint | Metodo | Descripcion | Formato |
+| :--- | :---: | :--- | :--- |
+| `/metrics` | `GET` | Scraping de Prometheus / VictoriaMetrics / Grafana | `text/plain (OpenMetrics)` |
+| `/api/kernel/status` | `GET` | Estado de sondas de kernel, latencia (us) y rendimiento | `application/json` |
+| `/api/kernel/events` | `GET` | Ultimos eventos interceptados en el ring-buffer de kernel | `application/json` |
+| `/api/telemetry/stream` | `GET` | Flujo en vivo de telemetria por Server-Sent Events (SSE) | `text/event-stream` |
+| `/api/telemetry/export` | `GET` | Exportacion de auditoria en estandar OCSF v1.1 para SIEM | `application/json` |
+| `/api/mitre/matrix` | `GET` | Matriz regional de amenazas alineada a MITRE ATT&CK | `application/json` |
+| `/api/status` | `GET` | Estado del agente, CPU, memoria, uptime y defensa activa | `application/json` |
+| `/api/actions/kill` | `POST` | Mitigacion activa: Terminacion segura y forzada de PID | `application/json` |
+| `/api/actions/block_ip` | `POST` | Mitigacion activa: Inyeccion de regla en firewall | `application/json` |
+| `/dashboard` | `GET` | Interfaz grafica interactiva Cyberpunk | `text/html` |
 
-Para mostrar el proyecto sin exponer procesos reales del servidor:
+---
 
-```bash
-# Local
-export OWLEYE_DEMO_MODE=true   # Linux/macOS
-$env:OWLEYE_DEMO_MODE="true"   # Windows PowerShell
-python sentry.py
+## 🌟 Firma & Creditos
 
-# Docker (perfil demo, puerto 8001)
-docker compose --profile demo up -d --build
-```
-
-### Modo Live (monitoreo real)
-
-```bash
-export OWLEYE_DEMO_MODE=false
-python sentry.py
-```
-
-### Variables de entorno
-
-| Variable | Descripci�n | Default |
-|----------|-------------|---------|
-| `OWLEYE_PORT` | Puerto del dashboard | `8000` |
-| `OWLEYE_DEMO_MODE` | `true` = datos simulados | `false` |
-| `SENTRY_TELEGRAM_TOKEN` | Token del bot de Telegram | � |
-| `SENTRY_TELEGRAM_CHAT_ID` | Chat ID para alertas | � |
-
-### Rutas
-
-- `/` ? Landing page (portfolio)
-- `/dashboard` ? Dashboard interactivo
-- `/api/status` ? Estado en tiempo real
-- `/api/threats` ? Amenazas heur�sticas
-- `/ws/live` ? WebSocket en vivo
-- `/health` ? Health check
-
-### Despliegue en un servidor (Docker)
-
-```bash
-# Modo demo para portfolio
-OWLEYE_DEMO_MODE=true docker compose up -d --build
-
-# Modo live (requiere privilegios para firewall)
-docker compose up -d --build
-```
-
-### Reverse Proxy (Nginx) ejemplo
-
-```nginx
-server {
-    listen 80;
-    server_name owleye.example.com;
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-    }
-}
-```
+Desarrollado y mantenido por **ExeDevCentral**.
+Diseno de interfaz y experiencia de usuario cyberpunk: **[Exepaginasweb.com](https://exepaginasweb.com)**.
+Licencia MIT.

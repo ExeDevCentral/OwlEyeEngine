@@ -1,11 +1,11 @@
 #!/bin/bash
-# OwlEyeEngine Global Quick Installer for Linux
+# OwlEyeEngine v4.0 Enterprise - Linux Quick Installer
 set -e
 
-echo "🦉 Initializing OwlEyeEngine v3.0 Global Installation..."
+echo "🦉 Initializing OwlEyeEngine v4.0 Enterprise Installation..."
 
 if [ "$EUID" -ne 0 ]; then
-  echo "[!] Warning: Running as non-root. Active Defense (iptables/process kill) may require sudo privileges."
+  echo "[!] Warning: Running as non-root. Kernel hooks and active firewall mitigation may require sudo privileges."
 fi
 
 # Check Python 3
@@ -15,7 +15,8 @@ if ! command -v python3 &> /dev/null; then
 fi
 
 echo "[+] Installing Python dependencies..."
-pip3 install -r requirements.txt || pip install -r requirements.txt
+python3 -m pip install -r requirements.txt || pip install -r requirements.txt
+python3 -m pip install -e . || true
 
-echo "[+] Starting OwlEye Engine Service..."
+echo "[+] Starting OwlEye Engine v4.0 Enterprise..."
 python3 sentry.py

@@ -1,239 +1,647 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OwlEyeEngine | Cyber Security Dashboard</title>
-    <meta name="description" content="Real-time cybersecurity monitoring, heuristic threat detection and active defense dashboard.">
+    <title>OwlEyeEngine | Estación de Seguridad & Kernel Telemetry</title>
+    <meta name="description" content="Estación de telemetría de kernel, detección heurística y mitigación activa con estética vintage Linux ultra-suave.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="background-glow"></div>
-    <div class="scan-line"></div>
+<body class="vintage-workstation">
+    <!-- Fondos de ambientación retro sutil -->
+    <div class="crt-vignette" aria-hidden="true"></div>
+    <div class="crt-scanlines" aria-hidden="true"></div>
+    <div class="ambient-glow" aria-hidden="true"></div>
 
-    <header class="navbar">
-        <div class="brand">
-            <div class="logo-container">
-                <span class="owl-icon">🦉</span>
-                <div class="brand-text">
-                    <span class="title">OwlEyeEngine <span class="version-tag">v3.0</span></span>
-                    <span class="subtitle">Silent Monitor & Active Defense</span>
+    <!-- TTY STATUS BAR (Estilo Linux Workstation) -->
+    <div class="tty-topbar">
+        <div class="tty-left">
+            <span class="tty-node"><span class="prompt-user">root</span>@<span class="prompt-host">owleye-node01</span>:<span class="prompt-dir">/sys/kernel/ebpf</span>#</span>
+            <span class="tty-badge"><span class="led-indicator led-green"></span> TTY1: ONLINE</span>
+            <span class="tty-spec">ARCH: x86_64 | KERNEL: 6.8.0-ebpf-probes</span>
+        </div>
+        <div class="tty-right">
+            <span class="tty-clock" id="ttyClock">00:00:00 UTC</span>
+            <span class="tty-mode-pill" id="demoBadge" style="display:none;">MODO SIMULACIÓN DEMO</span>
+        </div>
+    </div>
+
+    <!-- WORKSTATION MAIN HEADER -->
+    <header class="station-header">
+        <div class="station-brand">
+            <div class="logo-box">
+                <span class="owl-logo">🦉</span>
+                <span class="logo-phosphor-glow"></span>
+            </div>
+            <div class="station-titles">
+                <div class="brand-line">
+                    <h1 class="brand-title">OwlEyeEngine</h1>
+                    <span class="retro-version-tag">v4.0 Enterprise</span>
+                    <span class="linux-tag">[Linux Kernel EDR]</span>
                 </div>
+                <p class="brand-subtitle">Estación Táctica de Telemetría en Núcleo & Defensa Activa</p>
             </div>
         </div>
 
-        <div class="nav-right">
-            <div class="demo-badge" id="demoBadge" style="display:none;">DEMO MODE</div>
-            <div class="defense-toggle-container">
-                <span class="toggle-label">Active Defense:</span>
-                <label class="switch">
+        <div class="station-controls">
+            <!-- Sonda Kernel Activa -->
+            <div class="probe-hud-pill" id="probeBadge">
+                <span class="led-indicator led-cyan"></span>
+                <div class="pill-text">
+                    <span class="pill-label">SONDA ACTIVA</span>
+                    <span class="pill-value" id="probeBadgeText">eBPF TRACEPOINT (sys_enter_execve)</span>
+                </div>
+            </div>
+
+            <!-- Interruptor intuitivo de Defensa Activa -->
+            <div class="defense-controller" title="Activa o desactiva la mitigación automática de amenazas">
+                <div class="switch-info">
+                    <span class="switch-title">DEFENSA AUTOMÁTICA</span>
+                    <span class="switch-status-label" id="defenseStatusLabel">Modo Alerta</span>
+                </div>
+                <label class="toggle-slider-wrap">
                     <input type="checkbox" id="autoDefenseToggle" onchange="toggleAutoDefense(this.checked)">
-                    <span class="slider round"></span>
+                    <span class="toggle-track">
+                        <span class="toggle-thumb"></span>
+                    </span>
                 </label>
-                <span id="defenseStatusBadge" class="badge badge-warning">ALERT</span>
+                <span id="defenseStatusBadge" class="status-badge badge-warning">ALERTA</span>
             </div>
         </div>
     </header>
 
-    <main class="dashboard-container">
-        <section class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">CPU UTILIZATION</span>
-                    <span class="stat-icon pulse-icon">⚡</span>
-                </div>
-                <div class="stat-value" id="cpuVal">0%</div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" id="cpuBar" style="width: 0%;"></div></div>
-            </div>
+    <!-- LIVE TELEMETRY SLOT TICKER (Cinta de eventos en movimiento suave) -->
+    <div class="telemetry-slot-ticker" id="telemetryTicker">
+        <div class="ticker-prefix">
+            <span class="ticker-dot">●</span>
+            <span>LIVE SYSCALL TICKER:</span>
+        </div>
+        <div class="ticker-content" id="tickerContent">
+            <span class="ticker-item"><span class="ticker-sub">[PROCESS]</span> sys_enter_execve (nginx) · Latencia: 6.2μs · Estado: Seguro</span>
+        </div>
+        <div class="ticker-action">
+            <a href="/metrics" target="_blank" class="ticker-link" title="Ver métricas estándar de Prometheus">Prometheus /metrics ↗</a>
+        </div>
+    </div>
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">MEMORY USAGE</span>
-                    <span class="stat-icon">🧠</span>
-                </div>
-                <div class="stat-value cyan" id="memVal">0 MB</div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill cyan" id="memBar" style="width: 0%;"></div></div>
-            </div>
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="station-container">
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">THREATS DETECTED</span>
-                    <span class="stat-icon">🚨</span>
-                </div>
-                <div class="stat-value rose" id="threatsCountVal">0</div>
-                <div class="stat-sub" id="mitigatedVal">0 mitigated</div>
+        <!-- BANNER INTUITIVO PARA EL USUARIO -->
+        <section class="human-friendly-banner" id="humanBanner">
+            <div class="banner-status-icon">
+                <span class="shield-icon">🛡️</span>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-title">UPTIME</span>
-                    <span class="stat-icon">⏱️</span>
-                </div>
-                <div class="stat-value green" id="uptimeVal">00:00:00</div>
-                <div class="stat-sub" id="statusVal">INITIALIZING</div>
+            <div class="banner-text">
+                <h2 class="banner-heading" id="bannerHeading">SISTEMA CUSTODIADO Y OPERATIVO</h2>
+                <p class="banner-explanation" id="bannerExplanation">
+                    Las sondas a nivel kernel están monitorizando procesos efímeros y conexiones sospechosas con latencia inferior a 15 microsegundos.
+                </p>
+            </div>
+            <div class="banner-quick-actions">
+                <button class="btn btn-retro-ghost" onclick="fetchKernelEvents()">↻ Refrescar Sondas</button>
+                <button class="btn btn-retro-primary" onclick="switchTab('kernel')">Ver Métricas de Núcleo</button>
             </div>
         </section>
 
-        <nav class="tab-bar">
-            <button class="tab-btn active" onclick="switchTab('overview')">🎯 Threats & Alerts</button>
-            <button class="tab-btn" onclick="switchTab('processes')">🔍 Processes</button>
-            <button class="tab-btn" onclick="switchTab('network')">🌐 Network</button>
-            <button class="tab-btn" onclick="switchTab('defender')">🛡️ Active Defense</button>
-            <button class="tab-btn" onclick="switchTab('logs')">📜 Logs</button>
+        <!-- 5-COLUMN SLOT-MOTION STATS GRID -->
+        <section class="stats-slot-grid">
+            <!-- CPU -->
+            <div class="slot-card">
+                <div class="window-decor-bar">
+                    <span class="decor-dot"></span>
+                    <span class="decor-title">cpu_util.sys</span>
+                </div>
+                <div class="slot-card-body">
+                    <div class="metric-top">
+                        <span class="metric-name">USO DE CPU</span>
+                        <span class="metric-chip chip-cyan">HTOP</span>
+                    </div>
+                    <div class="slot-number-wrapper">
+                        <span class="slot-number slot-accent-cyan" id="cpuVal">0%</span>
+                    </div>
+                    <div class="analog-meter">
+                        <div class="analog-fill fill-cyan" id="cpuBar" style="width: 0%;"></div>
+                    </div>
+                    <span class="metric-footnote">Carga balanceada en núcleos</span>
+                </div>
+            </div>
+
+            <!-- MEMORIA -->
+            <div class="slot-card">
+                <div class="window-decor-bar">
+                    <span class="decor-dot"></span>
+                    <span class="decor-title">mem_pool.sys</span>
+                </div>
+                <div class="slot-card-body">
+                    <div class="metric-top">
+                        <span class="metric-name">MEMORIA RAM</span>
+                        <span class="metric-chip chip-emerald">VIRT_MEM</span>
+                    </div>
+                    <div class="slot-number-wrapper">
+                        <span class="slot-number slot-accent-emerald" id="memVal">0 MB</span>
+                    </div>
+                    <div class="analog-meter">
+                        <div class="analog-fill fill-emerald" id="memBar" style="width: 0%;"></div>
+                    </div>
+                    <span class="metric-footnote" id="memPercentFootnote">Consumo estable</span>
+                </div>
+            </div>
+
+            <!-- LATENCIA KERNEL (MICROSEGUNDOS) -->
+            <div class="slot-card">
+                <div class="window-decor-bar">
+                    <span class="decor-dot"></span>
+                    <span class="decor-title">ebpf_hook_latency</span>
+                </div>
+                <div class="slot-card-body">
+                    <div class="metric-top">
+                        <span class="metric-name">LATENCIA DEL NÚCLEO</span>
+                        <span class="metric-chip chip-purple">SUB-MICROSEC</span>
+                    </div>
+                    <div class="slot-number-wrapper">
+                        <span class="slot-number slot-accent-purple" id="kernelLatencyVal">0.0 μs</span>
+                    </div>
+                    <div class="sub-label-box" id="kernelProbeTypeVal">Sonda eBPF Operativa</div>
+                    <span class="metric-footnote">Sin retraso de sondeo</span>
+                </div>
+            </div>
+
+            <!-- AMENAZAS DETECTADAS -->
+            <div class="slot-card">
+                <div class="window-decor-bar">
+                    <span class="decor-dot"></span>
+                    <span class="decor-title">threat_anomalies.db</span>
+                </div>
+                <div class="slot-card-body">
+                    <div class="metric-top">
+                        <span class="metric-name">AMENAZAS DETECTADAS</span>
+                        <span class="metric-chip chip-rose">HEURÍSTICA</span>
+                    </div>
+                    <div class="slot-number-wrapper">
+                        <span class="slot-number slot-accent-rose" id="threatsCountVal">0</span>
+                    </div>
+                    <div class="sub-label-box text-rose" id="mitigatedVal">0 mitigadas</div>
+                    <span class="metric-footnote">MITRE ATT&CK Correlacionado</span>
+                </div>
+            </div>
+
+            <!-- TIEMPO ACTIVO & ESTADO -->
+            <div class="slot-card">
+                <div class="window-decor-bar">
+                    <span class="decor-dot"></span>
+                    <span class="decor-title">daemon_uptime.log</span>
+                </div>
+                <div class="slot-card-body">
+                    <div class="metric-top">
+                        <span class="metric-name">TIEMPO EN LÍNEA</span>
+                        <span class="metric-chip chip-amber">SYSTEMD</span>
+                    </div>
+                    <div class="slot-number-wrapper">
+                        <span class="slot-number slot-accent-amber" id="uptimeVal">00:00:00</span>
+                    </div>
+                    <div class="sub-label-box text-emerald" id="statusVal">INICIALIZANDO</div>
+                    <span class="metric-footnote">Daemon v4.0 en ejecución</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RETRO WORKSTATION TABS -->
+        <nav class="workstation-nav-bar">
+            <button class="nav-tab-btn active" onclick="switchTab('overview')">
+                <span class="tab-icon">⚠️</span>
+                <span class="tab-text">Alertas & Amenazas</span>
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('kernel')">
+                <span class="tab-icon">🔬</span>
+                <span class="tab-text">Núcleo & eBPF</span>
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('processes')">
+                <span class="tab-icon">📊</span>
+                <span class="tab-text">Procesos (htop)</span>
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('network')">
+                <span class="tab-icon">🌐</span>
+                <span class="tab-text">Red & Sockets</span>
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('defender')">
+                <span class="tab-icon">🛡️</span>
+                <span class="tab-text">Defensa & Firewall</span>
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('logs')">
+                <span class="tab-icon">📜</span>
+                <span class="tab-text">Registro Forense</span>
+            </button>
         </nav>
 
-        <section id="tab-overview" class="tab-content active">
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>🚨 Detected Threats</h3>
-                    <button class="btn-sm btn-secondary" onclick="fetchThreats()">↻ Refresh</button>
+        <!-- ========================================== -->
+        <!-- TAB 1: OVERVIEW & THREATS                  -->
+        <!-- ========================================== -->
+        <section id="tab-overview" class="station-tab-content active">
+            <div class="workstation-window">
+                <div class="window-titlebar">
+                    <div class="window-controls">
+                        <span class="win-btn win-close"></span>
+                        <span class="win-btn win-min"></span>
+                        <span class="win-btn win-max"></span>
+                    </div>
+                    <span class="window-title-text">[ /var/log/owleye/threat_stream.log - Registro de Anomalías ]</span>
+                    <button class="btn btn-sm btn-retro-secondary" onclick="fetchThreats()">↻ Refrescar</button>
                 </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Type</th>
-                                <th>Severity</th>
-                                <th>Score</th>
-                                <th>Details</th>
-                                <th>Mitigation</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="threatsTableBody">
-                            <tr><td colspan="7" class="loading">Loading threats...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="window-body">
+                    <div class="window-helper-bar">
+                        <span>ℹ️ <strong>Historial de Amenazas:</strong> Registra intentos de escaneo de puertos y ejecución de payloads no autorizados en tiempo real.</span>
+                    </div>
+                    <div class="table-scroll-wrapper">
+                        <table class="retro-table">
+                            <thead>
+                                <tr>
+                                    <th>HORA</th>
+                                    <th>VECTOR DE AMENAZA</th>
+                                    <th>SEVERIDAD</th>
+                                    <th>PUNTUACIÓN</th>
+                                    <th>MITRE ATT&CK</th>
+                                    <th>DETALLES TÉCNICOS</th>
+                                    <th>ESTADO MITIGACIÓN</th>
+                                    <th>ACCIÓN MANUAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="threatsTableBody">
+                                <tr><td colspan="8" class="loading-cell">Cargando amenazas detectadas...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="tab-processes" class="tab-content">
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>🔍 Process Inspection (htop)</h3>
-                    <input type="text" id="procSearch" class="search-input" placeholder="Search PID or name..." onkeyup="filterProcesses()">
+        <!-- ========================================== -->
+        <!-- TAB 2: KERNEL & EBPF TELEMETRY            -->
+        <!-- ========================================== -->
+        <section id="tab-kernel" class="station-tab-content">
+            <!-- HUD DE KERNEL -->
+            <div class="kernel-telemetry-hud">
+                <div class="hud-box">
+                    <span class="hud-box-label">SONDA EN ESPACIO DE KERNEL</span>
+                    <span class="hud-box-val text-cyan" id="hudProbeName">Linux eBPF (sys_enter_execve)</span>
+                    <span class="hud-box-sub">Intercepción instantánea de llamadas</span>
                 </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>PID</th>
-                                <th>Process</th>
-                                <th>User</th>
-                                <th>Path</th>
-                                <th>CPU %</th>
-                                <th>RAM %</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="procTableBody">
-                            <tr><td colspan="7" class="loading">Loading processes...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="hud-box">
+                    <span class="hud-box-label">LLAMADAS POR SEGUNDO</span>
+                    <span class="hud-box-val text-emerald" id="hudSyscallRate">0.0/s</span>
+                    <span class="hud-box-sub">Rendimiento continuo de captura</span>
                 </div>
-            </div>
-        </section>
-
-        <section id="tab-network" class="tab-content">
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>🌐 Network Connections</h3>
-                    <button class="btn-sm btn-secondary" onclick="fetchConnections()">↻ Refresh</button>
+                <div class="hud-box">
+                    <span class="hud-box-label">LATENCIA DE INTERCEPCIÓN</span>
+                    <span class="hud-box-val text-purple" id="hudLatencyVal">0.0 μs</span>
+                    <span class="hud-box-sub">Sub-microsegundo (sin overhead de CPU)</span>
                 </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Local</th>
-                                <th>Remote</th>
-                                <th>Status</th>
-                                <th>PID</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="netTableBody">
-                            <tr><td colspan="6" class="loading">Loading connections...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="hud-box">
+                    <span class="hud-box-label">CARGA DEL RING BUFFER</span>
+                    <span class="hud-box-val text-amber" id="hudRingBuffer">0%</span>
+                    <span class="hud-box-sub">0 paquetes perdidos en memoria</span>
                 </div>
             </div>
-        </section>
 
-        <section id="tab-defender" class="tab-content">
-            <div class="grid-2col">
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3>🚫 Blocked IPs</h3>
+            <!-- MATRIZ TÁCTICA MITRE ATT&CK -->
+            <div class="workstation-window" style="margin-top: 1.5rem;">
+                <div class="window-titlebar">
+                    <div class="window-controls">
+                        <span class="win-btn win-close"></span>
+                        <span class="win-btn win-min"></span>
+                        <span class="win-btn win-max"></span>
                     </div>
-                    <div class="manual-block-box">
-                        <input type="text" id="manualBlockIP" class="search-input" placeholder="IP address to block...">
-                        <button class="btn btn-danger" onclick="manualBlockIP()">Block IP</button>
-                    </div>
-                    <ul class="blocked-list" id="blockedIPsList">
-                        <li class="empty-msg">No blocked IPs.</li>
-                    </ul>
+                    <span class="window-title-text">[ /etc/owleye/mitre_attack_matrix.conf - Alineación Táctica Regional ]</span>
+                    <span class="status-badge badge-info" id="mitreRegionalIndex">NIVEL REGIONAL: ELEVADO</span>
                 </div>
-
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3>⚙️ Defense Rules</h3>
+                <div class="window-body">
+                    <div class="window-helper-bar">
+                        <span>🎯 <strong>Mapeo Táctico Internacional:</strong> Correlaciona eventos del sistema operativo con técnicas documentadas de adversarios cibernéticos.</span>
                     </div>
-                    <div class="rules-list">
-                        <div class="rule-item">
-                            <div>
-                                <strong>Auto-Kill Suspicious Paths</strong>
-                                <p class="subtext">Terminate processes from /tmp or Temp directories instantly.</p>
-                            </div>
-                            <span class="badge badge-success">ACTIVE</span>
+                    <div class="mitre-tactics-grid">
+                        <div class="tactic-card">
+                            <span class="tactic-header">EJECUCIÓN</span>
+                            <span class="tactic-id">T1059 / T1059.004</span>
+                            <p class="tactic-desc">Sonda eBPF en execve para scripts y binarios sospechosos.</p>
+                            <span class="tactic-status" id="mitreExecStatus">MONITORIZANDO</span>
                         </div>
-                        <div class="rule-item">
-                            <div>
-                                <strong>Auto-Block Port Scanning</strong>
-                                <p class="subtext">Firewall block IPs with 5+ connections per minute.</p>
-                            </div>
-                            <span class="badge badge-success">ACTIVE</span>
+                        <div class="tactic-card">
+                            <span class="tactic-header">DESCUBRIMIENTO</span>
+                            <span class="tactic-id">T1046</span>
+                            <p class="tactic-desc">Heurística de barrido de puertos de red y reconocimiento.</p>
+                            <span class="tactic-status" id="mitreDiscStatus">MONITORIZANDO</span>
                         </div>
-                        <div class="rule-item">
-                            <div>
-                                <strong>Heuristic Threat Scoring</strong>
-                                <p class="subtext">Weighted scoring 0-100 with severity classification.</p>
-                            </div>
-                            <span class="badge badge-success">ACTIVE</span>
+                        <div class="tactic-card">
+                            <span class="tactic-header">COMANDO Y CONTROL</span>
+                            <span class="tactic-id">T1071 / T1071.001</span>
+                            <p class="tactic-desc">Intercepción de sockets de salida hacia puertos anómalos.</p>
+                            <span class="tactic-status" id="mitreC2Status">MONITORIZANDO</span>
+                        </div>
+                        <div class="tactic-card">
+                            <span class="tactic-header">EVASIÓN DE DEFENSAS</span>
+                            <span class="tactic-id">T1036 / T1562</span>
+                            <p class="tactic-desc">Detección de binarios camuflados en /tmp y señales kill.</p>
+                            <span class="tactic-status" id="mitreEvaStatus">MONITORIZANDO</span>
+                        </div>
+                        <div class="tactic-card">
+                            <span class="tactic-header">ESCALADA DE PRIVILEGIOS</span>
+                            <span class="tactic-id">T1068 / T1055</span>
+                            <p class="tactic-desc">Sonda ptrace y manipulación no autorizada de memoria.</p>
+                            <span class="tactic-status" id="mitrePrivStatus">MONITORIZANDO</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- STREAM DE KERNEL EN VIVO & SOC PROMETHEUS -->
+            <div class="grid-dual-columns" style="margin-top: 1.5rem;">
+                <!-- TERMINAL EN VIVO CON SLOT MOTION -->
+                <div class="workstation-window">
+                    <div class="window-titlebar">
+                        <div class="window-controls">
+                            <span class="win-btn win-close"></span>
+                            <span class="win-btn win-min"></span>
+                            <span class="win-btn win-max"></span>
+                        </div>
+                        <span class="window-title-text">[ /dev/ebpf_pipe - Stream de Syscalls en Vivo ]</span>
+                        <div class="win-actions">
+                            <button class="btn btn-sm btn-retro-secondary" onclick="fetchKernelEvents()">↻ Refrescar</button>
+                            <span class="live-pulse-dot"></span>
+                        </div>
+                    </div>
+                    <div class="window-body">
+                        <!-- Filtros de subsistemas -->
+                        <div class="terminal-filter-strip">
+                            <span class="filter-label">FILTRAR:</span>
+                            <button class="filter-tag active" onclick="filterKernelSubsystem('ALL')">TODOS</button>
+                            <button class="filter-tag" onclick="filterKernelSubsystem('PROCESS')">PROCESOS</button>
+                            <button class="filter-tag" onclick="filterKernelSubsystem('NETWORK')">RED</button>
+                            <button class="filter-tag" onclick="filterKernelSubsystem('DEFENSE')">DEFENSA</button>
+                            <button class="filter-tag" onclick="filterKernelSubsystem('MEMORY')">MEMORIA</button>
+                        </div>
+                        <div class="crt-terminal-box" id="kernelStreamTerminal">
+                            <div class="log-row"><span class="txt-cyan">[SISTEMA]</span> Conectando con el bus de telemetría de kernel...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOC INTEGRATION & PROMETHEUS -->
+                <div class="workstation-window">
+                    <div class="window-titlebar">
+                        <div class="window-controls">
+                            <span class="win-btn win-close"></span>
+                            <span class="win-btn win-min"></span>
+                            <span class="win-btn win-max"></span>
+                        </div>
+                        <span class="window-title-text">[ /etc/prometheus/scrape.d - Integración con SOC / SIEM ]</span>
+                        <a href="/metrics" target="_blank" class="btn btn-sm btn-retro-primary">🔗 Abrir /metrics</a>
+                    </div>
+                    <div class="window-body">
+                        <p class="soc-intro">
+                            OwlEyeEngine implementa estándares de la industria para exportación de telemetría. Es compatible directamente con <strong>Prometheus, Grafana Agent, VictoriaMetrics y Datadog</strong>, además de exportar eventos en formato <strong>OCSF v1.1</strong> para SIEMs corporativos (Splunk, Wazuh, Elastic).
+                        </p>
+
+                        <div class="soc-metric-cards">
+                            <div class="soc-badge-item">
+                                <span class="badge-title">Formato de Métricas:</span>
+                                <span class="status-badge badge-success">OpenMetrics / Prometheus</span>
+                            </div>
+                            <div class="soc-badge-item">
+                                <span class="badge-title">Esquema SIEM:</span>
+                                <span class="status-badge badge-info">OCSF v1.1.0 JSON</span>
+                            </div>
+                        </div>
+
+                        <div class="retro-code-block">
+                            <span class="code-title">Configuración para prometheus.yml:</span>
+                            <pre><code>- job_name: 'owleye_node'
+  scrape_interval: 2s
+  static_configs:
+    - targets: ['localhost:8000']
+      labels:
+        environment: 'production'
+        region: 'latam-regional'</code></pre>
+                        </div>
+
+                        <div class="soc-btn-group">
+                            <button class="btn btn-retro-secondary" onclick="downloadOcsfBatch()">📥 Exportar Lote OCSF (JSON)</button>
+                            <button class="btn btn-retro-secondary" onclick="copyMetricsCurl()">📋 Copiar Comando cURL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section id="tab-logs" class="tab-content">
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>📜 System Logs</h3>
-                    <button class="btn-sm btn-secondary" onclick="fetchLogs()">↻ Refresh</button>
+        <!-- ========================================== -->
+        <!-- TAB 3: PROCESS MONITOR (HTOP)              -->
+        <!-- ========================================== -->
+        <section id="tab-processes" class="station-tab-content">
+            <div class="workstation-window">
+                <div class="window-titlebar">
+                    <div class="window-controls">
+                        <span class="win-btn win-close"></span>
+                        <span class="win-btn win-min"></span>
+                        <span class="win-btn win-max"></span>
+                    </div>
+                    <span class="window-title-text">[ htop - Monitor de Procesos en Tiempo Real ]</span>
+                    <div class="search-input-wrap">
+                        <span class="search-prompt">$ find /proc -name:</span>
+                        <input type="text" id="procSearch" class="retro-input" placeholder="Buscar PID o binario..." onkeyup="filterProcesses()">
+                    </div>
                 </div>
-                <div class="terminal-view" id="logsTerminal">
-                    <div>Initializing log terminal...</div>
+                <div class="window-body">
+                    <div class="window-helper-bar">
+                        <span>💡 <strong>Control de Procesos:</strong> Puedes finalizar cualquier proceso no autorizado haciendo clic en "Finalizar PID". Los procesos críticos del sistema están protegidos contra cierre accidental.</span>
+                    </div>
+                    <div class="table-scroll-wrapper">
+                        <table class="retro-table">
+                            <thead>
+                                <tr>
+                                    <th>PID</th>
+                                    <th>NOMBRE DEL PROCESO</th>
+                                    <th>USUARIO</th>
+                                    <th>RUTA DEL BINARIO</th>
+                                    <th>CPU %</th>
+                                    <th>RAM %</th>
+                                    <th>ACCIONES DE DEFENSA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="procTableBody">
+                                <tr><td colspan="7" class="loading-cell">Cargando árbol de procesos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: NETWORK SOCKETS                     -->
+        <!-- ========================================== -->
+        <section id="tab-network" class="station-tab-content">
+            <div class="workstation-window">
+                <div class="window-titlebar">
+                    <div class="window-controls">
+                        <span class="win-btn win-close"></span>
+                        <span class="win-btn win-min"></span>
+                        <span class="win-btn win-max"></span>
+                    </div>
+                    <span class="window-title-text">[ netstat / ss - Conexiones de Red y Puntos de Entrada ]</span>
+                    <button class="btn btn-sm btn-retro-secondary" onclick="fetchConnections()">↻ Refrescar Sockets</button>
+                </div>
+                <div class="window-body">
+                    <div class="window-helper-bar">
+                        <span>🌐 <strong>Monitor de Red:</strong> Inspecciona sockets TCP/UDP abiertos y conexiones entrantes desde internet o redes locales.</span>
+                    </div>
+                    <div class="table-scroll-wrapper">
+                        <table class="retro-table">
+                            <thead>
+                                <tr>
+                                    <th>PROTOCOLO</th>
+                                    <th>DIRECCIÓN LOCAL</th>
+                                    <th>ANFITRIÓN REMOTO</th>
+                                    <th>ESTADO DE CONEXIÓN</th>
+                                    <th>PID ASOCIADO</th>
+                                    <th>ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="netTableBody">
+                                <tr><td colspan="6" class="loading-cell">Inspeccionando sockets de red...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: ACTIVE DEFENDER & FIREWALL         -->
+        <!-- ========================================== -->
+        <section id="tab-defender" class="station-tab-content">
+            <div class="grid-dual-columns">
+                <!-- IP BLOCKING -->
+                <div class="workstation-window">
+                    <div class="window-titlebar">
+                        <div class="window-controls">
+                            <span class="win-btn win-close"></span>
+                            <span class="win-btn win-min"></span>
+                            <span class="win-btn win-max"></span>
+                        </div>
+                        <span class="window-title-text">[ /etc/nftables.d/quarantine.conf - Direcciones IP Aisladas ]</span>
+                    </div>
+                    <div class="window-body">
+                        <p class="soc-intro">Ingresa una dirección IP hostil para inyectar una regla de bloqueo inmediato en el cortafuegos del host (soporte nativo para <code>nftables</code>, <code>iptables</code> o <code>Windows Firewall</code>):</p>
+                        
+                        <div class="manual-block-form">
+                            <input type="text" id="manualBlockIP" class="retro-input" placeholder="Ej: 198.51.100.42">
+                            <button class="btn btn-retro-danger" onclick="manualBlockIP()">Bloquear en Cortafuegos</button>
+                        </div>
+
+                        <div class="blocked-ips-container">
+                            <span class="container-title">DIRECCIONES EN CUARENTENA ACTIVA:</span>
+                            <ul class="retro-blocked-list" id="blockedIPsList">
+                                <li class="empty-list-notice">No hay direcciones bloqueadas actualmente.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POLÍTICAS DE DEFENSA -->
+                <div class="workstation-window">
+                    <div class="window-titlebar">
+                        <div class="window-controls">
+                            <span class="win-btn win-close"></span>
+                            <span class="win-btn win-min"></span>
+                            <span class="win-btn win-max"></span>
+                        </div>
+                        <span class="window-title-text">[ /etc/owleye/defense_rules.json - Políticas Automatizadas ]</span>
+                    </div>
+                    <div class="window-body">
+                        <div class="policy-card-list">
+                            <div class="policy-card">
+                                <div class="policy-info">
+                                    <strong class="policy-name">Auto-Kill en Rutas Sospechosas (eBPF Tracepoint)</strong>
+                                    <p class="policy-desc">Finaliza instantáneamente procesos ejecutados desde <code>/tmp</code>, <code>/var/tmp</code> o <code>AppData\Local\Temp</code>.</p>
+                                </div>
+                                <span class="status-badge badge-success">ACTIVA</span>
+                            </div>
+
+                            <div class="policy-card">
+                                <div class="policy-info">
+                                    <strong class="policy-name">Aislamiento por Barrido de Puertos (Port Scanning)</strong>
+                                    <p class="policy-desc">Inyecta regla de rechazo en <code>nftables</code> si una IP supera 5 conexiones en 60 segundos.</p>
+                                </div>
+                                <span class="status-badge badge-success">ACTIVA</span>
+                            </div>
+
+                            <div class="policy-card">
+                                <div class="policy-info">
+                                    <strong class="policy-name">Puntuación Heurística Ponderada (Threat Scoring)</strong>
+                                    <p class="policy-desc">Calcula índice de riesgo (0-100) y clasifica severidad (CRITICAL, HIGH, MEDIUM, LOW).</p>
+                                </div>
+                                <span class="status-badge badge-success">ACTIVA</span>
+                            </div>
+
+                            <div class="policy-card">
+                                <div class="policy-info">
+                                    <strong class="policy-name">Protección de Procesos Críticos</strong>
+                                    <p class="policy-desc">Inmunidad de sistema para <code>systemd</code>, <code>init</code>, <code>sshd</code>, <code>explorer.exe</code>.</p>
+                                </div>
+                                <span class="status-badge badge-info">PROTEGIDO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: FORENSIC LOGS                       -->
+        <!-- ========================================== -->
+        <section id="tab-logs" class="station-tab-content">
+            <div class="workstation-window">
+                <div class="window-titlebar">
+                    <div class="window-controls">
+                        <span class="win-btn win-close"></span>
+                        <span class="win-btn win-min"></span>
+                        <span class="win-btn win-max"></span>
+                    </div>
+                    <span class="window-title-text">[ /var/log/_sentry_log.sys - Registro Forense Oculto ]</span>
+                    <button class="btn btn-sm btn-retro-secondary" onclick="fetchLogs()">↻ Refrescar Registro</button>
+                </div>
+                <div class="window-body">
+                    <div class="window-helper-bar">
+                        <span>📜 <strong>Caja Negra de Seguridad:</strong> Registro estructurado persistente en disco con eventos de bajo nivel para auditorías de cumplimiento (ISO 27001, SOC 2).</span>
+                    </div>
+                    <div class="crt-terminal-box" id="logsTerminal" style="height: 380px;">
+                        <div class="log-row">Inicializando consola forense...</div>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="dashboard-footer">
-        <span>OwlEyeEngine v3.0 Global Edition</span>
-        <span class="footer-sep">·</span>
-        <a href="/" target="_blank">Landing Page</a>
-        <span class="footer-sep">·</span>
-        <a href="https://github.com/ExeDevCentral/OwlEyeEngine" target="_blank">GitHub</a>
+    <!-- FOOTER ESTILO WORKSTATION -->
+    <footer class="station-footer">
+        <div class="footer-details">
+            <span class="footer-brand">OwlEyeEngine v4.0 Enterprise</span>
+            <span class="footer-sep">|</span>
+            <span class="footer-arch">Linux eBPF & Kernel Telemetry Platform</span>
+            <span class="footer-sep">|</span>
+            <a href="/" target="_blank" class="footer-link">Landing Page</a>
+            <span class="footer-sep">|</span>
+            <a href="/metrics" target="_blank" class="footer-link">Métricas Prometheus</a>
+            <span class="footer-sep">|</span>
+            <a href="https://github.com/ExeDevCentral/OwlEyeEngine" target="_blank" class="footer-link">Repositorio GitHub</a>
+        </div>
     </footer>
 
+    <!-- FIRMA OFICIAL EXEPAGINASWEB -->
     <div class="xepw-crafted" role="contentinfo">
         <div class="xepw-sig-glow" aria-hidden="true"></div>
         <a class="xepw-sig-link" href="https://exepaginasweb.com" target="_blank" rel="noopener noreferrer" title="Diseño & Desarrollo por Exepaginasweb.com">
@@ -244,6 +652,7 @@
         </a>
     </div>
 
+    <!-- SCRIPT CLIENTE -->
     <script src="/static/app.js"></script>
 </body>
 </html>

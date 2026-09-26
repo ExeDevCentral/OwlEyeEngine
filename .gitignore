@@ -25,3 +25,7 @@ Thumbs.db
 dist/
 build/
 *.zip
+
+# Quarantine
+quarantine_vault/
+*.quarantine
