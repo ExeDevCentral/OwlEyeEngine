@@ -29,3 +29,5 @@ build/
 # Quarantine
 quarantine_vault/
 *.quarantine
+
+.vercel
