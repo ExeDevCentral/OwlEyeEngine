@@ -1212,3 +1212,47 @@ input:checked + .toggle-track .toggle-thumb { transform: translateX(18px); }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
 ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
+
+/* Mobile Station Responsive Enhancements */
+@media (max-width: 768px) {
+    .tty-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 8px 12px;
+    }
+    .tty-left, .tty-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .tty-spec {
+        display: none;
+    }
+    .station-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 12px;
+    }
+    .station-title {
+        font-size: clamp(1.4rem, 5vw, 1.8rem) !important;
+    }
+    .metrics-summary-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+    .station-body {
+        padding: 12px 8px !important;
+    }
+    .terminal-scroll-area {
+        max-height: 380px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-summary-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
