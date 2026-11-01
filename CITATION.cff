@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use or reference this software, please cite it as below."
+authors:
+  - family-names: "Echevarria"
+    given-names: "Exequiel"
+title: "OwlEyeEngine"
+date-released: 2026-10-31
+url: "https://github.com/ExeDevCentral/OwlEyeEngine"
