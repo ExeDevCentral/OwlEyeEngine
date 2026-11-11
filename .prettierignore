@@ -1,21 +1,5 @@
-# Dependencies
-node_modules/
-vendor/
-
-# Build artifacts
-dist/
-build/
-.next/
-out/
-target/
-
-# Package managers
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
-
-# Environment & logs
-.env*
-*.log
-.coverage
-__pycache__/
+dist
+build
+coverage
+node_modules
+.next
