@@ -652,6 +652,30 @@
         </a>
     </div>
 
+    <!-- Mobile Only Ergonomic Bottom Dock (< 768px) -->
+    <nav class="station-mobile-dock" aria-label="Navegación rápida móvil">
+        <button type="button" class="station-dock-btn active" onclick="switchTab('overview')">
+            <span class="d-icon">⚠️</span>
+            <span class="d-label">Alertas</span>
+        </button>
+        <button type="button" class="station-dock-btn" onclick="switchTab('kernel')">
+            <span class="d-icon">🔬</span>
+            <span class="d-label">eBPF</span>
+        </button>
+        <button type="button" class="station-dock-btn" onclick="switchTab('processes')">
+            <span class="d-icon">📊</span>
+            <span class="d-label">Procesos</span>
+        </button>
+        <button type="button" class="station-dock-btn" onclick="switchTab('network')">
+            <span class="d-icon">🌐</span>
+            <span class="d-label">Red</span>
+        </button>
+        <button type="button" class="station-dock-btn station-dock-cta" onclick="switchTab('defender')">
+            <span class="d-icon">🛡️</span>
+            <span class="d-label">Defensa</span>
+        </button>
+    </nav>
+
     <!-- SCRIPT CLIENTE -->
     <script src="/static/app.js"></script>
 </body>

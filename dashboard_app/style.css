@@ -1213,46 +1213,124 @@ input:checked + .toggle-track .toggle-thumb { transform: translateX(18px); }
 ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
 
-/* Mobile Station Responsive Enhancements */
+.station-mobile-dock {
+    display: none;
+}
+
+/* Mobile Station Responsive Enhancements — Minimalist, Clean Spacing, Zero Overlap */
 @media (max-width: 768px) {
+    body.vintage-workstation {
+        padding-bottom: 5.5rem;
+    }
     .tty-topbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-        padding: 8px 12px;
-    }
-    .tty-left, .tty-right {
-        width: 100%;
+        flex-direction: row;
+        align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap;
+        padding: 6px 12px;
     }
-    .tty-spec {
+    .tty-spec, .tty-node {
         display: none;
     }
     .station-header {
         flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px;
+    }
+    .station-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .defense-controller {
+        justify-content: space-between;
+    }
+    .telemetry-slot-ticker {
+        padding: 6px 12px;
+    }
+    .ticker-prefix span:last-child {
+        display: none;
+    }
+    .human-friendly-banner {
+        flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
-        padding: 14px 12px;
+        padding: 14px;
+        gap: 10px;
     }
-    .station-title {
-        font-size: clamp(1.4rem, 5vw, 1.8rem) !important;
+    .banner-quick-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
-    .metrics-summary-grid {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
+    .banner-quick-actions .btn {
+        justify-content: center;
     }
-    .station-body {
-        padding: 12px 8px !important;
+    .stats-slot-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
-    .terminal-scroll-area {
-        max-height: 380px !important;
-        font-size: 0.75rem !important;
+    .workstation-nav-bar {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+    .workstation-nav-bar::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-tab-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    .station-mobile-dock {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 250;
+        background: rgba(9, 12, 19, 0.95);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        border-radius: 18px;
+        padding: 6px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+    }
+    .station-dock-btn {
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        color: var(--text-secondary);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 6px 2px;
+        min-height: 46px;
+        font-family: var(--font-ui);
+        font-size: 0.66rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .station-dock-btn .d-icon {
+        font-size: 1rem;
+        line-height: 1;
+    }
+    .station-dock-btn.station-dock-cta {
+        background: rgba(57, 211, 83, 0.16);
+        border-color: rgba(57, 211, 83, 0.4);
+        color: var(--phosphor-green);
     }
 }
 
 @media (max-width: 480px) {
-    .metrics-summary-grid {
-        grid-template-columns: 1fr !important;
+    .stats-slot-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
