@@ -192,6 +192,9 @@ owleye kill 4921 --reason "Unauthorized binary execution in /tmp"
 | `/api/actions/block_ip`| `POST` | `JSON` | Active mitigation: Kernel firewall block injection |
 | `/dashboard` | `GET` | `HTML` | Interactive low-latency Cyberpunk Operations Dashboard |
 
+### Mobile Telemetry & SOC Ergonomics (`< 768px`)
+- **Minimalist Mobile Bottom Dock**: Provides a 4-action thumb-zone dock on the landing page (`Sondas`, `Motor`, `Stack`, `Dashboard`) and a 5-tab tactical dock on the live EDR dashboard (`Alertas`, `eBPF`, `Procesos`, `Red`, `Defensa`) with compact TTY status bars and zero overlap.
+
 ---
 
 ## 8. License
@@ -202,4 +205,4 @@ Distributed under the **MIT License**. Engineered for defensive cybersecurity re
   <sub>Engineered by <a href="https://github.com/ExeDevCentral">ExeDevCentral</a>.</sub>
 </div>
 
-<!-- ExeDevCentral Audit & Quality Stamp: 2026-11-14 (Phase 10/10) -->
+<!-- ExeDevCentral Audit & Quality Stamp: 2026-11-19 (Mobile UX & Zero-Overlap Verification) -->
